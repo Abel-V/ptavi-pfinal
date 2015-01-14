@@ -10,58 +10,13 @@ import time
 
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
+from uaclient import XMLHandler
 
 
 def WriteLog(Mensaje):
     hora = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time()))
     log.write(hora + " " + Mensaje + "\r\n")
 
-
-class SmallSMILHandler(ContentHandler):
-
-    def __init__(self):
-        self.account = ['username', 'passwd']
-        self.uaserver = ['ip', 'puerto']
-        self.rtpaudio = ['puerto']
-        self.regproxy = ['ip', 'puerto']
-        self.log = ['path']
-        self.audio = ['path']
-        self.tags = []
-
-    def startElement(self, name, attrs):
-        if name == 'account':
-            dicc = {"name": "account"}
-            for atributo in self.account:
-                dicc[atributo] = attrs.get(atributo, "")
-            self.tags.append(dicc)
-        elif name == 'uaserver':
-            dicc = {"name": "uaserver"}
-            for atributo in self.uaserver:
-                dicc[atributo] = attrs.get(atributo, "")
-            self.tags.append(dicc)
-        elif name == 'rtpaudio':
-            dicc = {"name": "rtpaudio"}
-            for atributo in self.rtpaudio:
-                dicc[atributo] = attrs.get(atributo, "")
-            self.tags.append(dicc)
-        elif name == 'audio':
-            dicc = {"name": "audio"}
-            for atributo in self.audio:
-                dicc[atributo] = attrs.get(atributo, "")
-            self.tags.append(dicc)
-        elif name == 'log':
-            dicc = {"name": "log"}
-            for atributo in self.log:
-                dicc[atributo] = attrs.get(atributo, "")
-            self.tags.append(dicc)
-        elif name == 'regproxy':
-            dicc = {"name": "regproxy"}
-            for atributo in self.regproxy:
-                dicc[atributo] = attrs.get(atributo, "")
-            self.tags.append(dicc)
-
-    def get_tags(self):
-        return self.tags
 
 
 class EchoHandler(SocketServer.DatagramRequestHandler):
@@ -144,7 +99,7 @@ if __name__ == "__main__":
     # Obtención de datos del fichero xml
     fich = open(sys.argv[1])
     parser = make_parser()
-    sHandler = SmallSMILHandler()
+    sHandler = XMLHandler()
     parser.setContentHandler(sHandler)
     parser.parse(fich)
     list_tags = sHandler.get_tags()
