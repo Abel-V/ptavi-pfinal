@@ -208,6 +208,9 @@ if __name__ == "__main__":
 
     try:
         CONFIG = sys.argv[1]
+    except IndexError:
+        print "Usage: python uaserver.py config"
+    try:
         #Leemos la DTD usando la clase definida en client.py
         parser = make_parser()
         sHandler = DtdXMLHandler()
@@ -223,8 +226,6 @@ if __name__ == "__main__":
         serv = SocketServer.UDPServer((HOST, PORT), SIPHandler)
         print "Listening..."
         serv.serve_forever()
-    except IndexError:
-        print "Usage: python uaserver.py config"
     except KeyboardInterrupt:
         log = open(log_path, "a")
         log.write("...Finishing\r\n")
