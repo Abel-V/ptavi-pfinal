@@ -15,7 +15,10 @@ def WriteLog(Mensaje):
     log.write(hora + " " + Mensaje + "\r\n")
 
 
-class SmallSMILHandler(ContentHandler):
+class XMLHandler(ContentHandler):
+    """
+    Clase para leer de un fichero de configuración XML
+    """
 
     def __init__(self):
         self.account = ['username', 'passwd']
